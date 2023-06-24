@@ -44,7 +44,4 @@ async function getUser(uid) {
 }
 
 module.exports.User = model
-module.exports = {
-    getUser,
-    migrateUsers
-}
+module.exports.getUser = getUser

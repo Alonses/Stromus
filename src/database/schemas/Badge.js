@@ -19,6 +19,5 @@ async function createBadge(uid, badge_id, timestamp) {
 module.exports.Badge = model
 module.exports = {
     createBadge,
-    getUserBadges,
-    migrateBadges
+    getUserBadges
 }
