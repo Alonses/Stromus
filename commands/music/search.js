@@ -3,7 +3,7 @@ const { QueryType } = require('discord-player')
 
 module.exports = {
     name: 'search',
-    description: 'search a track',
+    description: 'pesquise uma faixa',
     voiceChannel: true,
     options: [
         {
@@ -14,7 +14,7 @@ module.exports = {
         }
     ],
 
-    async execute({ client, inter }) {
+    async execute({ client, inter, user }) {
         const song = inter.options.getString('song')
 
         const res = await player.search(song, {
@@ -31,10 +31,9 @@ module.exports = {
         const maxTracks = res.tracks.slice(0, 10)
 
         const embed = new EmbedBuilder()
-            .setColor('#ff0000')
+            .setColor(client.embed_color(user.misc.color))
             .setAuthor({ name: `Resultados para ${song}`, iconURL: client.user.displayAvatarURL({ size: 1024, dynamic: true }) })
-            .setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. ${track.title} | ${track.author}`).join('\n')}\n\nSelect choice between **1** and **${maxTracks.length}** or **cancel** ⬇️`)
-            .setTimestamp()
+            .setDescription(`${maxTracks.map((track, i) => `**${i + 1}**. ${track.title} | ${track.author}`).join('\n')}\n\nSelecione entre **1** e **${maxTracks.length}** ou **cancele** ⬇️`)
             .setFooter({ text: inter.member.user.username, iconURL: inter.member.avatarURL({ dynamic: true }) })
 
         inter.reply({ embeds: [embed] })
@@ -50,7 +49,7 @@ module.exports = {
             if (query.content.toLowerCase() === 'cancel') return inter.followUp({ content: `Pesquisa cancelada ✅`, ephemeral: true }), collector.stop()
 
             const value = parseInt(query)
-            if (!value || value <= 0 || value > maxTracks.length) return inter.followUp({ content: `Valor inválido, envie algo entre **1** e **${maxTracks.length}** ou **cancele**... ❌`, ephemeral: true })
+            if (!value || value <= 0 || value > maxTracks.length) return inter.followUp({ content: `:o: | Valor inválido, envie algo entre **1** e **${maxTracks.length}** ou **cancele**...`, ephemeral: true })
 
             collector.stop()
 
@@ -58,7 +57,7 @@ module.exports = {
                 if (!queue.connection) await queue.connect(inter.member.voice.channel)
             } catch {
                 await player.deleteQueue(inter.guildId)
-                return inter.followUp({ content: `Eu não consigo conectar neste canal de voz... ❌`, ephemeral: true })
+                return inter.followUp({ content: `:o: | Eu não consigo conectar neste canal de voz`, ephemeral: true })
             }
 
             await inter.followUp(`Carregando sua pesquisa... 🎧`)
@@ -69,7 +68,7 @@ module.exports = {
         })
 
         collector.on('end', (msg, reason) => {
-            if (reason === 'time') return inter.followUp({ content: `Search timed out ${inter.member}... try again ? ❌`, ephemeral: true })
+            if (reason === 'time') return inter.followUp({ content: `:hotsprings: | Tempo de pesquisa expierado`, ephemeral: true })
         })
     }
 }

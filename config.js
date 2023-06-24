@@ -1,6 +1,6 @@
 module.exports = {
     app: {
-        playing: 'músicas do bluezão',
+        listening: 'músicas do bluezão',
         global: true,
         guild: '776816831863586856'
     },
