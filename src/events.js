@@ -16,27 +16,27 @@ player.on('trackStart', (queue, track) => {
         .setColor('#13f857')
 
     const back = new ButtonBuilder()
-        .setLabel('Back')
+        .setLabel('Anterior')
         .setCustomId(JSON.stringify({ ffb: 'back' }))
         .setStyle('Primary')
 
     const skip = new ButtonBuilder()
-        .setLabel('Skip')
+        .setLabel('Próxima')
         .setCustomId(JSON.stringify({ ffb: 'skip' }))
         .setStyle('Primary')
 
     const resumepause = new ButtonBuilder()
-        .setLabel('Resume & Pause')
+        .setLabel('Pausar')
         .setCustomId(JSON.stringify({ ffb: 'resume&pause' }))
         .setStyle('Danger')
 
     const loop = new ButtonBuilder()
-        .setLabel('Loop')
+        .setLabel('Repeteco')
         .setCustomId(JSON.stringify({ ffb: 'loop' }))
         .setStyle('Secondary')
 
     const queuebutton = new ButtonBuilder()
-        .setLabel('Queue')
+        .setLabel('Fila')
         .setCustomId(JSON.stringify({ ffb: 'queue' }))
         .setStyle('Secondary')
 
