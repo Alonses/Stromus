@@ -5,7 +5,7 @@ module.exports = {
     description: 'Get the songs in the queue',
     voiceChannel: true,
 
-    execute({ client, inter }) {
+    execute({ client, inter, user }) {
         const queue = player.getQueue(inter.guildId)
 
         if (!queue) return inter.reply({ content: `Não há nenhuma música tocando no momento ❌`, ephemeral: true })
@@ -21,11 +21,10 @@ module.exports = {
         const tracks = queue.tracks.map((track, i) => `**${i + 1}** - ${track.title} | ${track.author} (adicionado por : ${track.requestedBy.username})`)
 
         const embed = new EmbedBuilder()
-            .setColor('#ff0000')
+            .setColor(client.embed_color(user.misc.color))
             .setThumbnail(inter.guild.iconURL({ size: 2048, dynamic: true }))
             .setAuthor({ name: `Lista do servidor - ${inter.guild.name} ${methods[queue.repeatMode]}`, iconURL: client.user.displayAvatarURL({ size: 1024, dynamic: true }) })
             .setDescription(`Agora: ${queue.current.title}\n\n${tracks.slice(0, 5).join('\n')}\n\n${nextSongs}`)
-            .setTimestamp()
             .setFooter({ text: inter.member.user.username, iconURL: inter.member.avatarURL({ dynamic: true }) })
 
         inter.reply({ embeds: [embed] })
