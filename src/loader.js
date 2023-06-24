@@ -4,19 +4,18 @@ const { Collection } = require('discord.js')
 client.commands = new Collection()
 CommandsArray = []
 
-const events = readdirSync('./events/').filter(file => file.endsWith('.js'))
+const events = readdirSync('src/events/').filter(file => file.endsWith('.js'))
 
-console.log(`Loading events...`)
+console.log(`Carregando eventos...`)
 
 for (const file of events) {
-    const event = require(`../events/${file}`)
+    const event = require(`./events/${file}`)
 
-    console.log(`-> [Loaded Event] ${file.split('.')[0]}`)
     client.on(file.split('.')[0], event.bind(null, client))
-    delete require.cache[require.resolve(`../events/${file}`)]
+    delete require.cache[require.resolve(`./events/${file}`)]
 }
 
-console.log(`Loading commands...`)
+console.log(`Carregando comandos...`)
 
 readdirSync('./commands/').forEach(dirs => {
     const commands = readdirSync(`./commands/${dirs}`).filter(files => files.endsWith('.js'))
@@ -26,7 +25,6 @@ readdirSync('./commands/').forEach(dirs => {
         if (command.name && command.description) {
             CommandsArray.push(command)
 
-            console.log(`-> [Loaded Command] ${command.name.toLowerCase()}`)
             client.commands.set(command.name.toLowerCase(), command)
             delete require.cache[require.resolve(`../commands/${dirs}/${file}`)]
         } else console.log(`[failed Command]  ${command.name.toLowerCase()}`)

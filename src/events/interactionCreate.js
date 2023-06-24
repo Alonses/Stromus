@@ -1,6 +1,9 @@
 const { EmbedBuilder, InteractionType } = require('discord.js')
 
-module.exports = (client, inter) => {
+module.exports = async (client, inter) => {
+
+    const user = await client.getUser(inter.user.id)
+
     if (inter.type === InteractionType.ApplicationCommand) {
         const DJ = client.config.opt.DJ
         const command = client.commands.get(inter.commandName)
@@ -13,7 +16,7 @@ module.exports = (client, inter) => {
             if (inter.guild.members.me.voice.channel && inter.member.voice.channel.id !== inter.guild.members.me.voice.channel.id) return inter.reply({ embeds: [new EmbedBuilder().setColor('#ff0000').setDescription(`❌ | You are not in the same Voice Channel`)], ephemeral: true, })
         }
 
-        command.execute({ inter, client })
+        command.execute({ inter, client, user })
     }
 
     if (inter.type === InteractionType.MessageComponent) {
@@ -22,8 +25,8 @@ module.exports = (client, inter) => {
         const queue = player.getQueue(inter.guildId)
 
         if (file_of_button) {
-            delete require.cache[require.resolve(`../src/buttons/${file_of_button}.js`)]
-            const button = require(`../src/buttons/${file_of_button}.js`)
+            delete require.cache[require.resolve(`../buttons/${file_of_button}.js`)]
+            const button = require(`../buttons/${file_of_button}.js`)
             if (button) return button({ client, inter, customId, queue })
         }
     }

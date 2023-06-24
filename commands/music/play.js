@@ -23,7 +23,7 @@ module.exports = {
             searchEngine: QueryType.AUTO
         })
 
-        if (!res || !res.tracks.length) return inter.editReply({ content: `Não encontrei resultados para essa pesquisa`, ephemeral: true });
+        if (!res || !res.tracks.length) return inter.editReply({ content: `Não encontrei resultados para essa pesquisa`, ephemeral: true })
 
         const queue = await player.createQueue(inter.guild, {
             metadata: inter.channel,

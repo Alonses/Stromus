@@ -1,7 +1,6 @@
 module.exports = {
     app: {
-        token: 'MTAxNTQwNjEwNTAzNzM4MTY1Mg.GbLu_l.tkq9-R4SW_A8fr9d25-AsDHPIquLKthZkG4oPg',
-        playing: 'test',
+        playing: 'músicas do bluezão',
         global: true,
         guild: '776816831863586856'
     },
