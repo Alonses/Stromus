@@ -5,7 +5,7 @@ module.exports = {
     description: 'view what is playing!',
     voiceChannel: true,
 
-    execute({ inter }) {
+    execute({ inter, user }) {
         const queue = player.getQueue(inter.guildId)
 
         if (!queue) return inter.reply({ content: `Não há nenhuma música tocando no momento ❌`, ephemeral: true })
@@ -20,15 +20,13 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setAuthor({ name: track.title, iconURL: client.user.displayAvatarURL({ size: 1024, dynamic: true }) })
             .setThumbnail(track.thumbnail)
-            .setDescription(`**Volume: ** \`${queue.volume}%\`\n**Duração: **\`${trackDuration}\`\n**Progresso:** ${progress}\n**Repeteco: ** \`${methods[queue.repeatMode]}\`\nSolicitado por ${track.requestedBy}`)
-            .setFooter({ text: inter.member.user.username, iconURL: inter.member.avatarURL({ dynamic: true }) })
-            .setColor('ff0000')
-            .setTimestamp()
+            .setDescription(`**Volume: ** \`${queue.volume}%\`\n**Duração: **\`${trackDuration}\`\n${progress}\n**Repeteco: ** \`${methods[queue.repeatMode]}\`\nSolicitado por ${track.requestedBy}`)
+            .setColor(client.embed_color(user.misc.color))
 
         const saveButton = new ButtonBuilder()
             .setLabel('Salvar faixa')
             .setCustomId(JSON.stringify({ ffb: 'savetrack' }))
-            .setStyle('Danger')
+            .setStyle('Secondary')
 
         const volumeup = new ButtonBuilder()
             .setLabel('+ Volume')
@@ -43,15 +41,20 @@ module.exports = {
         const loop = new ButtonBuilder()
             .setLabel('Repetir')
             .setCustomId(JSON.stringify({ ffb: 'loop' }))
-            .setStyle('Danger')
+            .setStyle('Secondary')
+
+        let resume = "Tocar"
+
+        if (!queue.connection.paused)
+            resume = "Pausar"
 
         const resumepause = new ButtonBuilder()
-            .setLabel('Tocar e Pausar')
+            .setLabel(resume)
             .setCustomId(JSON.stringify({ ffb: 'resume&pause' }))
             .setStyle('Success')
 
         const row = new ActionRowBuilder().addComponents(volumedown, saveButton, resumepause, loop, volumeup)
 
-        inter.reply({ embeds: [embed], components: [row] })
+        inter.reply({ embeds: [embed], components: [row], ephemeral: true })
     }
 }

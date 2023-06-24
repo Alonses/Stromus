@@ -6,14 +6,12 @@ module.exports = {
     execute({ inter }) {
         const queue = player.getQueue(inter.guildId)
 
-        if (!queue) return inter.reply({ content: `Não há nenhuma música tocando no momento ❌`, ephemeral: true })
+        if (!queue) return inter.reply({ content: `❌ | Não há nenhuma música tocando no momento`, ephemeral: true })
 
-        if (queue.connection.paused) return inter.reply({ content: 'The track is currently paused!', ephemeral: true })
-
-        if (queue.connection.paused) return inter.reply({ content: `The track is currently paused, ${inter.member}... try again ? ❌`, ephemeral: true })
+        if (queue.connection.paused) return inter.reply({ content: ':pause_button: | A música atual está pausada!', ephemeral: true })
 
         const success = queue.setPaused(true)
 
-        return inter.reply({ content: success ? `Current music ${queue.current.title} paused ✅` : `Something went wrong ${inter.member}... try again ? ❌` })
+        return inter.reply({ content: success ? `:pause_button: | ${queue.current.title} pausada` : `:o: | Algo deu errado com este comando.` })
     }
 }
