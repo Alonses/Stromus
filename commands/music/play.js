@@ -8,13 +8,13 @@ module.exports = {
     options: [
         {
             name: 'song',
-            description: 'the song you want to play',
+            description: 'o som que você deseja tocar',
             type: ApplicationCommandOptionType.String,
             required: true,
         }
     ],
-
     async execute({ inter }) {
+
         await inter.deferReply({ ephemeral: true })
 
         const song = inter.options.getString('song')

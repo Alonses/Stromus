@@ -1,4 +1,7 @@
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require('discord.js')
+const { QueryType } = require('discord-player')
+
+let hora_patrocinio = true
 
 player.on('error', (queue, error) => {
     console.log(`Error emitted from the queue ${error.message}`)
@@ -8,8 +11,29 @@ player.on('connectionError', (queue, error) => {
     console.log(`Error emitted from the connection ${error.message}`)
 })
 
-player.on('trackStart', (queue, track) => {
+player.on('trackStart', async (queue, track) => {
     if (!client.config.opt.loopMessage && queue.repeatMode !== 0) return
+
+    if (hora_patrocinio) {
+
+        const res = await player.search("https://youtu.be/hOWfn6bu1rk", {
+            requestedBy: client.user,
+            searchEngine: QueryType.AUTO
+        })
+
+        queue.remove(0)
+
+        queue.insert(res.tracks[0], 0)
+        queue.insert(track, 1)
+
+        await queue.play()
+
+        hora_patrocinio = false
+        return
+    }
+
+    if (track.title.includes("stromus_jaba"))
+        return queue.metadata.send({ content: "📢 | Antes de continuar, uma palavra dos nossos patrocinadores 😋" })
 
     const embed = new EmbedBuilder()
         .setAuthor({ name: `Começando a tocar ${track.title} em ${queue.connection.channel.name} 🎧`, iconURL: track.requestedBy.avatarURL() })
@@ -45,6 +69,9 @@ player.on('trackStart', (queue, track) => {
 })
 
 player.on('trackAdd', (queue, track) => {
+
+    if (track.title.includes("stromus_jaba")) return
+
     queue.metadata.send(`Faixa ${track.title} adicionado a fila ✅`)
 })
 
