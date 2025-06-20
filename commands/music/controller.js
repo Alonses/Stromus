@@ -13,14 +13,15 @@ module.exports = {
             required: true,
         }
     ],
-    async execute({ inter, client }) {
+
+    async execute({ inter, client, user }) {
         let Channel = inter.options.getChannel('channel');
         if (Channel.type !== 0) return inter.reply({ content: `Você precisa enviar isto num canal de texto.. ❌`, ephemeral: true })
 
         const embed = new EmbedBuilder()
             .setTitle('Controle a música com os botões abaixo')
+            .setColor(client.embed_color(user.misc.color))
             .setImage(inter.guild.iconURL({ size: 4096, dynamic: true }))
-            .setColor('#36393e')
             .setFooter({ text: inter.member.user.username, iconURL: inter.member.avatarURL({ dynamic: true }) })
 
         inter.reply({ content: `Enviando o controle para ${Channel}... ✅`, ephemeral: true })
